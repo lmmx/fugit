@@ -11,6 +11,8 @@ Git diff handling in Python.
 
 ## Motivation
 
+> _sed fugit interea fugit irreparabile tempus_ (“meanwhile, the irreplaceable time escapes”
+
 Despite the existence of GitPython, it remains awkward to access structured diffs for a given repo.
 This is particularly desirable for large diff sets, such as those created when migrating between
 linters (such as Black to Ruff, as motivated this library). In such cases it's desirable to be able
