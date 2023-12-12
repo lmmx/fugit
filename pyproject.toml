@@ -21,6 +21,7 @@ classifiers = [
 dependencies = [
     "defopt",
     "pydantic>=2.4.2",
+    "GitPython>=3.1.40",
 ]
 description = "Git diff parser."
 dynamic = ["version"]
