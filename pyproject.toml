@@ -22,7 +22,7 @@ dependencies = [
     "defopt",
     "pydantic>=2.4.2",
 ]
-description = "Git diff parser."
+description = "Pythonic git diff handling"
 dynamic = ["version"]
 keywords = [
     "git",

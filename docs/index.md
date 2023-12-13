@@ -1,8 +1,8 @@
 ---
 title: Fugit
-hide:
-  - navigation
-  - toc
+# hide:
+#   - navigation
+#   - toc
 ---
 
 #
@@ -12,5 +12,5 @@ hide:
 </figure>
 
 <center>
-    <h1 class="title">Git diff handling in Python.</h1>
+    <h1 class="title">Pythonic git diff handling</h1>
 </center>
