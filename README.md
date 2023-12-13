@@ -12,7 +12,7 @@
 [![Pydantic v2](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/pydantic/pydantic/main/docs/badge/v2.json)](https://docs.pydantic.dev/latest/contributing/#badges)
 [![Documentation](https://readthedocs.org/projects/fugit/badge/?version=latest)](https://fugit.readthedocs.io/en/latest/?version=latest)
 
-### Seize the diff
+### Git diff handling in Python
 
 </div>
 
