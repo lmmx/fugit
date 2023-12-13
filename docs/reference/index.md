@@ -1,13 +1,11 @@
 # Reference
 
-Despite the existence of GitPython, it remains awkward to access structured diffs for a given repo.
-This is particularly desirable for large diff sets, such as those created when migrating between
-linters (such as Black to Ruff, as motivated this library). In such cases it's desirable to be able
-to see clearly what the actual substance of the set of diffs is, but without programmatic means to
-access this set simply it becomes a manual effort (with each reader re-duplicating others' efforts
-or else just skipping the task and not making an informed decision).
+Accessing structured diffs in a Git repository remains challenging, even with tools like GitPython.
+This issue is especially pronounced when dealing with large diff sets, such as those generated
+during transitions between linters (e.g., from Black to Ruff). Currently, without a straightforward
+programmatic solution, understanding the essence of these diffs requires cumbersome manual effort.
 
-Before writing this library I investigated fast parsing approaches (Pydantic with Rust's regex
-crate in particular) and reviewed the internals of GitPython, as well as its API for accessing diffs.
+Before writing this library I explored fast parsing approaches (Pydantic's integration with Rust's regex
+crate in particular) and reviewed GitPython internals, as well as its pitfalls.
 
-The goal of this library is to make this specific facet of git easy to work with.
+_fugit_ simplifies access to git diffs, and will help you avoid the covert hazards in GitPython's API.
