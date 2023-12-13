@@ -52,6 +52,9 @@ version = {path = "src/fugit/__init__.py", source = "file"}
 test = [
     "pytest>=7.4.0",
 ]
+develop = [
+    "pysnooper>=1.2.0",
+]
 
 [tool.ruff]
 ignore = ["C408", "C901", "E501", "E741"]

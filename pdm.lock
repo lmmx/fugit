@@ -2,10 +2,10 @@
 # It is not intended for manual editing.
 
 [metadata]
-groups = ["default", "test"]
+groups = ["default", "test", "develop"]
 strategy = ["cross_platform"]
 lock_version = "4.4"
-content_hash = "sha256:751938620ac1621fca39fd4ff4f6eea7aa2455c0d4b261563ca84529a317dc4b"
+content_hash = "sha256:4ebbc9f1922a16c7aacc6cb556deaa0b2d0b1fec7f65525ed3bb830a0aa89ee4"
 
 [[package]]
 name = "annotated-types"
@@ -222,6 +222,15 @@ files = [
     {file = "pydantic_core-2.14.5-pp39-pypy39_pp73-musllinux_1_1_x86_64.whl", hash = "sha256:f5e412d717366e0677ef767eac93566582518fe8be923361a5c204c1a62eaafe"},
     {file = "pydantic_core-2.14.5-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:513b07e99c0a267b1d954243845d8a833758a6726a3b5d8948306e3fe14675e3"},
     {file = "pydantic_core-2.14.5.tar.gz", hash = "sha256:6d30226dfc816dd0fdf120cae611dd2215117e4f9b124af8c60ab9093b6e8e71"},
+]
+
+[[package]]
+name = "pysnooper"
+version = "1.2.0"
+summary = "A poor man's debugger for Python."
+files = [
+    {file = "PySnooper-1.2.0-py2.py3-none-any.whl", hash = "sha256:aa859aa9a746cffc1f35e4ee469d49c3cc5185b5fc0c571feb3af3c94d2eb625"},
+    {file = "PySnooper-1.2.0.tar.gz", hash = "sha256:810669e162a250a066d8662e573adbc5af770e937c5b5578f28bb7355d1c859b"},
 ]
 
 [[package]]
