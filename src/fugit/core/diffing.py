@@ -1,9 +1,8 @@
-from git import IndexFile, Repo, Tree
-from pydantic import BaseModel, ConfigDict
+from git import IndexFile, Repo
 
 from ..interfaces import DiffConfig
 
-__all__ = ["get_diff", "load_diff_info", "diff"]
+__all__ = ["get_diff", "filter_diff", "count_match", "load_diff", "diff"]
 
 
 def get_diff(index: IndexFile, tree: str | None, create_patch: bool):

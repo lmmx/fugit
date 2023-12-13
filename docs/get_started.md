@@ -34,9 +34,9 @@ You can use fugit on the command line:
     ```bash
     usage: fugit [-h] [--repo REPO] [--revision REVISION] [-c [CHANGE_TYPE ...]]
                  [--version]
-    
+
     Configure input filtering and output display.
-    
+
     options:
       -h, --help            show this help message and exit
       --repo REPO           The repo whose git diff is to be computed.
