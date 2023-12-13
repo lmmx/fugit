@@ -4,8 +4,6 @@
 
 <img src="./docs/assets/images/logo.png" alt="Fugit Logo" width=300></img>
 
-### Git diff handling in Python
-
 [![PyPI](https://img.shields.io/pypi/v/fugit?logo=python&logoColor=%23cccccc)](https://pypi.org/project/fugit)
 [![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/lmmx/fugit/master.svg)](https://results.pre-commit.ci/latest/github/lmmx/fugit/master)
@@ -13,6 +11,8 @@
 [![license](https://img.shields.io/github/license/lmmx/fugit.svg)](https://github.com/lmmx/fugit/blob/main/LICENSE)
 [![Pydantic v2](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/pydantic/pydantic/main/docs/badge/v2.json)](https://docs.pydantic.dev/latest/contributing/#badges)
 [![Documentation](https://readthedocs.org/projects/fugit/badge/?version=latest)](https://fugit.readthedocs.io/en/latest/?version=latest)
+
+### Git diff handling in Python
 
 </div>
 
