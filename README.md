@@ -14,11 +14,11 @@
 
 ### Git diff handling in Python.
 
-> _sed fugit interea fugit irreparabile tempus_
-> 
-> (“meanwhile, the irreplaceable time escapes”)
-
 </div>
+
+> _sed fugit interea fugit irreparabile tempus_
+
+(“meanwhile, the irreplaceable time escapes”)
 
 ## Motivation
 
