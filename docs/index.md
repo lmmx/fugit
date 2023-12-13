@@ -8,7 +8,7 @@ hide:
 #
 
 <figure markdown>
-  ![Image title](assets/images/logo.png){ width="300" }
+  ![Fugit logo](assets/images/logo-black.svg){ width="300" }
 </figure>
 
 <center>

@@ -2,7 +2,7 @@
 
 # fugit
 
-<img src="https://github.com/lmmx/fugit/raw/master/docs/assets/images/logo.png" alt="Fugit Logo" width=300></img>
+<img src="https://github.com/lmmx/fugit/raw/master/docs/assets/images/logo-black.svg" alt="Fugit Logo" width=200></img>
 
 [![PyPI](https://img.shields.io/pypi/v/fugit?logo=python&logoColor=%23cccccc)](https://pypi.org/project/fugit)
 [![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
