@@ -7,10 +7,8 @@ build:
 
 python:
   install:
-    - method: pip
-      path: .
-      extra_requirements:
-        - docs
+    # pdm export -G docs -f requirements -o docs/requirements.txt
+    - requirements: docs/requirements.txt
 
 mkdocs:
   configuration: mkdocs.yml
