@@ -12,5 +12,5 @@ title: Fugit
 </figure>
 
 <center>
-    <h1 class="title">Pythonic git diff handling</h1>
+    <h1 class="title">Seize the diff</h1>
 </center>
