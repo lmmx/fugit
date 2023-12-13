@@ -8,9 +8,9 @@ hide:
 #
 
 <figure markdown>
-  ![Fugit logo](assets/images/logo-black.svg){ width="300" }
+  ![Fugit logo](assets/images/hero.png){ width="300" }
 </figure>
 
 <center>
-    <h1 class="title">Seize the diff</h1>
+    <h1 class="title">Git diff handling in Python.</h1>
 </center>
