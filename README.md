@@ -15,7 +15,9 @@ Git diff handling in Python.
 
 ## Motivation
 
-> _sed fugit interea fugit irreparabile tempus_ (“meanwhile, the irreplaceable time escapes”
+> _sed fugit interea fugit irreparabile tempus_
+> 
+> (“meanwhile, the irreplaceable time escapes”)
 
 Despite the existence of GitPython, it remains awkward to access structured diffs for a given repo.
 This is particularly desirable for large diff sets, such as those created when migrating between
