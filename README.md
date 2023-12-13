@@ -1,4 +1,8 @@
+<div align="center"> 
+
 # fugit
+
+<img src="./docs/assets/images/logo.png" alt="Fugit Logo" width=300></img>
 
 [![PyPI](https://img.shields.io/pypi/v/fugit?logo=python&logoColor=%23cccccc)](https://pypi.org/project/fugit)
 [![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
@@ -8,10 +12,9 @@
 [![Pydantic v2](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/pydantic/pydantic/main/docs/badge/v2.json)](https://docs.pydantic.dev/latest/contributing/#badges)
 [![Documentation](https://readthedocs.org/projects/fugit/badge/?version=latest)](https://fugit.readthedocs.io/en/latest/?version=latest)
 
-
-<!-- [![build status](https://github.com/lmmx/fugit/actions/workflows/master.yml/badge.svg)](https://github.com/lmmx/fugit/actions/workflows/master.yml) -->
-
 Git diff handling in Python.
+
+</div>
 
 ## Motivation
 
