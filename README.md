@@ -12,15 +12,15 @@
 [![Pydantic v2](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/pydantic/pydantic/main/docs/badge/v2.json)](https://docs.pydantic.dev/latest/contributing/#badges)
 [![Documentation](https://readthedocs.org/projects/fugit/badge/?version=latest)](https://fugit.readthedocs.io/en/latest/?version=latest)
 
-Git diff handling in Python.
-
-</div>
-
-## Motivation
+### Git diff handling in Python.
 
 > _sed fugit interea fugit irreparabile tempus_
 > 
 > (“meanwhile, the irreplaceable time escapes”)
+
+</div>
+
+## Motivation
 
 Despite the existence of GitPython, it remains awkward to access structured diffs for a given repo.
 This is particularly desirable for large diff sets, such as those created when migrating between
