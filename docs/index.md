@@ -1,8 +1,8 @@
 ---
 title: Fugit
-# hide:
-#   - navigation
-#   - toc
+hide:
+  - navigation
+  - toc
 ---
 
 #
