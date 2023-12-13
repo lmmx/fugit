@@ -24,7 +24,7 @@ theme:
         icon: material/lightbulb
         name: Switch to light mode
   logo: assets/images/logo-white.svg
-  favicon: assets/images/logo.png
+  favicon: assets/images/logo-black.svg
   icon:
     repo: fontawesome/brands/github
   features:
