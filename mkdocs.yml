@@ -18,7 +18,7 @@ theme:
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: deep orange
+      primary: custom
       toggle:
         icon: material/lightbulb-outline
         name: Switch to dark mode
