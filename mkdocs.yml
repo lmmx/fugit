@@ -3,9 +3,12 @@ site_author: Louis Maddox
 site_description: >-
   Git diff handling in Python
 site_url: https://fugit.readthedocs.io/
-
 repo_name: lmmx/fugit
 repo_url: https://github.com/lmmx/fugit
+strict: true
+
+extra_css:
+  - stylesheets/extra.css
 
 copyright: Copyright &copy; 2023- Louis Maddox
 
@@ -15,11 +18,12 @@ theme:
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: green
+      primary: deep orange
       toggle:
         icon: material/lightbulb-outline
         name: Switch to dark mode
     - scheme: slate
+      primary: custom
       toggle:
         icon: material/lightbulb
         name: Switch to light mode
