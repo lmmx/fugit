@@ -17,15 +17,13 @@ def get_diff(index: IndexFile, tree: str | None, create_patch: bool):
     return index.diff(tree, create_patch=create_patch, R=reverse)
 
 
-def filter_diff(patch, info, config: DiffConfig) -> list[str]:
+def filter_diff(patch, info, config: DiffConfig) -> str:
     """
     Filter file-level diffs using info from both patch and metadata diffs.
     """
-    # Do any further filtering logic here
+    # Do any further filtering logic here (config is passed for future implementation)
     diff_text = patch.diff.decode()
-    if not config.quiet:
-        report(diff_text)
-    return [diff_text]
+    return diff_text
 
 
 def count_match(patches, infos) -> None:
@@ -35,9 +33,13 @@ def count_match(patches, infos) -> None:
 
 
 def load_diff(config: DiffConfig) -> list[str]:
-    # Note: You can either implement commit tree-based diffs (with less reversal
-    # weirdness) or get it from a string at runtime (more configurable so we do that)
-    # tree = repo.head.commit.tree
+    """
+    Note: You can either implement commit tree-based diffs (with no 'R' kwarg reversal
+    weirdness) or get it from a string at runtime (more configurable so we do that).
+    For reference, you would do it like this rather than ``config.revision``:
+
+      >>> tree = repo.head.commit.tree
+    """
     repo = Repo(config.repo, search_parent_directories=True)
     index = repo.index
     tree = config.revision
@@ -45,9 +47,11 @@ def load_diff(config: DiffConfig) -> list[str]:
     file_diff_info = get_diff(index, tree, create_patch=False)
     count_match(file_diff_patch, file_diff_info)
     diffs = []
-    for diff_patch, diff_info in zip(file_diff_patch, file_diff_info):
-        filtered = filter_diff(patch=diff_patch, info=diff_info, config=config)
-        diffs.extend(filtered)
+    for patch, info in zip(file_diff_patch, file_diff_info):
+        filtered = filter_diff(patch=patch, info=info, config=config)
+        if not config.quiet:
+            report(filtered)
+        diffs.append(filtered)
     return diffs
 
 
