@@ -1,8 +1,9 @@
 from git import IndexFile, Repo
 
 from ..interfaces import DiffConfig
+from .io import report
 
-__all__ = ["get_diff", "filter_diff", "count_match", "load_diff", "diff"]
+__all__ = ("get_diff", "filter_diff", "count_match", "load_diff", "diff")
 
 
 def get_diff(index: IndexFile, tree: str | None, create_patch: bool):
@@ -22,7 +23,8 @@ def filter_diff(patch, info, config: DiffConfig) -> list[str]:
     """
     # Do any further filtering logic here
     diff_text = patch.diff.decode()
-    print(diff_text)
+    if config.report:
+        report(diff_text)
     return [diff_text]
 
 
@@ -49,6 +51,6 @@ def load_diff(config: DiffConfig) -> list[str]:
     return diffs
 
 
-def diff(config: dict | DiffConfig) -> list[str]:
+def diff(**config) -> list[str]:
     """Narrow the input type to DiffConfig type for `load_diff`."""
     return load_diff(DiffConfig.model_validate(config))

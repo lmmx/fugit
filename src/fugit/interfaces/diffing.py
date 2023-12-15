@@ -3,7 +3,7 @@ from pydantic.types import DirectoryPath
 
 from .display import DisplayConfig
 
-__all__ = ["FilterConfig", "DiffConfig"]
+__all__ = ("FilterConfig", "DiffConfig")
 
 
 class FilterConfig(BaseModel):
