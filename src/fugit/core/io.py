@@ -5,4 +5,4 @@ __all__ = ("report",)
 
 def report(output: str) -> None:
     with SuppressBrokenPipeError():
-        print(output)
+        print(output, end="")

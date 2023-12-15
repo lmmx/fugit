@@ -23,7 +23,7 @@ def filter_diff(patch, info, config: DiffConfig) -> list[str]:
     """
     # Do any further filtering logic here
     diff_text = patch.diff.decode()
-    if config.report:
+    if not config.quiet:
         report(diff_text)
     return [diff_text]
 

@@ -6,4 +6,4 @@ __all__ = ("DisplayConfig",)
 class DisplayConfig(BaseModel):
     """Put any display settings here"""
 
-    report: bool = True
+    quiet: bool = False

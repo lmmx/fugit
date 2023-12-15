@@ -40,4 +40,4 @@ def run_cli() -> list[str]:
             configure(argv=["-h"])
     else:
         diff_text = load_diff(config)
-        return None if config.report else diff_text
+        return None if not config.quiet else diff_text

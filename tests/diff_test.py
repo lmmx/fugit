@@ -8,5 +8,5 @@ from fugit.interfaces import DiffConfig
 @mark.parametrize("expected", [[]])
 def test_diff_output(config_cls, expected):
     config = config_cls()
-    result = diff(config)
+    result = diff(config=config)
     assert result == expected

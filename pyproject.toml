@@ -20,6 +20,8 @@ classifiers = [
 dependencies = [
     "GitPython>=3.1.40",
     "defopt",
+    "parse-type>=0.6.2",
+    "parse>=1.20.0",
     "pydantic>=2.4.2",
 ]
 description = "Git diff handling in Python."

@@ -4,8 +4,8 @@
 [metadata]
 groups = ["default", "test", "develop", "mkdocs", "docs"]
 strategy = ["cross_platform"]
-lock_version = "4.4"
-content_hash = "sha256:6157c2465c17cbae50b1d1688ee4b3a3890aa5170ce4d93765bd6fb42cb21c53"
+lock_version = "4.4.1"
+content_hash = "sha256:2eae656daa3f12573e1866469980851656de54a70291f104abb2ee50ef62a913"
 
 [[package]]
 name = "annotated-types"
@@ -571,6 +571,29 @@ version = "0.5.6"
 summary = "Divides large result sets into pages for easier browsing"
 files = [
     {file = "paginate-0.5.6.tar.gz", hash = "sha256:5e6007b6a9398177a7e1648d04fdd9f8c9766a1a945bceac82f1929e8c78af2d"},
+]
+
+[[package]]
+name = "parse"
+version = "1.20.0"
+summary = "parse() is the opposite of format()"
+files = [
+    {file = "parse-1.20.0-py2.py3-none-any.whl", hash = "sha256:5e171b001452fa9f004c5a58a93525175468daf69b493e9fa915347ed7ff6968"},
+    {file = "parse-1.20.0.tar.gz", hash = "sha256:bd28bae37714b45d5894d77160a16e2be36b64a3b618c81168b3684676aa498b"},
+]
+
+[[package]]
+name = "parse-type"
+version = "0.6.2"
+requires_python = ">=2.7, !=3.0.*, !=3.1.*"
+summary = "Simplifies to build parse types based on the parse module"
+dependencies = [
+    "parse>=1.18.0; python_version >= \"3.0\"",
+    "six>=1.15",
+]
+files = [
+    {file = "parse_type-0.6.2-py2.py3-none-any.whl", hash = "sha256:06d39a8b70fde873eb2a131141a0e79bb34a432941fb3d66fad247abafc9766c"},
+    {file = "parse_type-0.6.2.tar.gz", hash = "sha256:79b1f2497060d0928bc46016793f1fca1057c4aacdf15ef876aa48d75a73a355"},
 ]
 
 [[package]]
