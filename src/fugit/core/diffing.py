@@ -7,7 +7,7 @@ from git.objects.blob import Blob
 from pydantic import BaseModel, ConfigDict, computed_field, create_model
 
 from ..interfaces import DiffConfig
-from .io import report
+from .io import fugit_console
 
 __all__ = ("get_diff", "discard_diff", "count_match", "load_diff", "diff")
 
@@ -116,16 +116,15 @@ def load_diff(config: DiffConfig) -> list[str]:
     file_diff_info = get_diff(index, tree, create_patch=False)
     count_match(file_diff_patch, file_diff_info)
     diffs: list[str] = []
-    for patch, info in zip(file_diff_patch, file_diff_info):
-        diff_info = DiffInfo.from_tree_pair(patch=patch, info=info)
-        if discard_diff(diff_info=diff_info, config=config):
-            continue
-        filtrate = diff_info.text
-        diffs.append(filtrate)
-        if not config.quiet:
-            change_overview = diff_info.overview
-            report(change_overview)
-            report(filtrate)
+    with fugit_console.pager_available() as console:
+        for patch, info in zip(file_diff_patch, file_diff_info):
+            diff_info = DiffInfo.from_tree_pair(patch=patch, info=info)
+            if discard_diff(diff_info=diff_info, config=config):
+                continue
+            filtrate = diff_info.text
+            diffs.append(filtrate)
+            console.print(diff_info.overview, style="bold yellow underline")
+            console.print(filtrate, style="red")
     return diffs
 
 
