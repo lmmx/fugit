@@ -40,12 +40,39 @@ pip install fugit
 
 ## Usage
 
-Expected interface:
+Use fugit on the command line as a replacement to `git diff`:
+
+```sh
+fugit
+```
+
+```
+usage: fugit [-h] [--repo REPO] [--revision REVISION] [-c [CHANGE_TYPE ...]]
+             [-q] [--version]
+
+Configure input filtering and output display.
+
+options:
+  -h, --help            show this help message and exit
+  --repo REPO           The repo whose git diff is to be computed.
+                        (default: .)
+  --revision REVISION   Specify the commit for comparison with the index. Use "HEAD" to
+                        refer to the latest branch commit, or "HEAD~{$n}" (e.g. "HEAD~1")
+                        to indicate a specific number of commits before the latest.
+                        (default: HEAD)
+  -c [CHANGE_TYPE ...], --change-type [CHANGE_TYPE ...]
+                        Change types to filter diffs for.
+                        (default: ['A', 'C', 'D', 'M', 'R', 'T', 'U', 'X', 'B'])
+  -q, --quiet           (default: False)
+  --version             show program's version number and exit
+```
+
+Or the Python interface:
 
 ```py
 from fugit import diff
 
-diff = diff(repo_path="/path/to/your/repo")
+diff(repo="/path/to/your/repo", quiet=True)
 ```
 
 ## Development
