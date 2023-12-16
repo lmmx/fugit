@@ -55,14 +55,14 @@ Configure input filtering and output display.
 options:
   -h, --help            show this help message and exit
   --repo REPO           The repo whose git diff is to be computed.
-                        (default: .)
+                        (type: Path, default: .)
   --revision REVISION   Specify the commit for comparison with the index. Use "HEAD" to
                         refer to the latest branch commit, or "HEAD~{$n}" (e.g. "HEAD~1")
                         to indicate a specific number of commits before the latest.
-                        (default: HEAD)
+                        (type: str, default: HEAD)
   -c [CHANGE_TYPE ...], --change-type [CHANGE_TYPE ...]
                         Change types to filter diffs for.
-                        (default: ['A', 'C', 'D', 'M', 'R', 'T', 'U', 'X', 'B'])
+                        (type: str, default: ['A', 'C', 'D', 'M', 'R', 'T', 'U', 'X', 'B'])
   -q, --quiet           (default: False)
   --version             show program's version number and exit
 ```

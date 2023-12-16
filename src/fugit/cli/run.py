@@ -13,7 +13,7 @@ __all__ = ("run_cli",)
 
 def configure(**defopt_kwargs) -> DiffConfig:
     """Runs defopt CLI using `sys.argv`, raises `SystemExit` if the config is invalid"""
-    defopt_kwargs.update(no_negated_flags=True)
+    defopt_kwargs.update(no_negated_flags=True, show_types=True)
     return defopt.run(DiffConfig, **defopt_kwargs)
 
 
