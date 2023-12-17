@@ -1,16 +1,21 @@
 from contextlib import contextmanager
+from functools import cache
 
 from rich.console import Console
 
+from ..types import SignedInteger
 from .error_handlers import SuppressBrokenPipeError
 
 __all__ = ("FugitConsole", "fugit_console")
 
 
+@cache
 class FugitConsole:
     console: Console
     page_with_styles: bool
     use_pager: bool
+    file_limit: SignedInteger
+    file_count: int = 0
 
     def __init__(
         self,
@@ -18,9 +23,11 @@ class FugitConsole:
         plain: bool = True,
         quiet: bool = False,
         use_pager: bool = True,
+        file_limit: SignedInteger = SignedInteger("-0"),
     ):
         self.page_with_styles: bool = page_with_styles
         self.use_pager: bool = use_pager
+        self.file_limit: SignedInteger = file_limit
         color_system = None if plain else "auto"
         self.console = Console(no_color=plain, quiet=quiet, color_system=color_system)
 
@@ -44,7 +51,12 @@ class FugitConsole:
         piping to `head` etc.
         """
         with SuppressBrokenPipeError():
-            fugit_console.console.print(output, end=end, style=style)
+            if self.file_limit != -0.0:
+                if self.file_count == self.file_limit:
+                    raise SystemExit(0)
+                if not self.file_limit.is_positive:
+                    raise NotImplementedError("Tail not implemented yet")
+            self.console.print(output, end=end, style=style)
 
 
 """

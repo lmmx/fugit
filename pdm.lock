@@ -4,7 +4,7 @@
 [metadata]
 groups = ["default", "test", "develop", "mkdocs", "docs"]
 strategy = ["cross_platform"]
-lock_version = "4.4.1"
+lock_version = "4.4"
 content_hash = "sha256:4f17fc447d4c632445b2ca8c158bc22c093f0ae14e3804667240a88420e6deac"
 
 [[package]]

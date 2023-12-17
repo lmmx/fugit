@@ -4,7 +4,13 @@ from typing import Any, Literal
 
 from git import Diff, IndexFile, Repo
 from git.objects.blob import Blob
-from pydantic import BaseModel, ConfigDict, computed_field, create_model
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    ValidationError,
+    computed_field,
+    create_model,
+)
 
 from ..interfaces import DiffConfig
 from .io import fugit_console
@@ -25,11 +31,11 @@ def get_diff(index: IndexFile, tree: str | None, create_patch: bool):
 
 def prefixed_model(prefix: str, field_types: list[tuple[str, Any]], /) -> dict:
     """Make kwargs for `pydantic.create_model`, applying a prefix to a field schema."""
-    fields = {f"{prefix}_{field}": (typ, ...) for field, typ in field_types}
+    fields = {f"{prefix}_{field}": (typ | None, ...) for field, typ in field_types}
     return {"__config__": ConfigDict(arbitrary_types_allowed=True), **fields}
 
 
-field_types = [("blob", Blob), ("mode", int | None), ("rawpath", bytes)]
+field_types = [("blob", Blob), ("mode", int), ("rawpath", bytes)]
 SrcInfo = create_model("SrcInfo", **prefixed_model("a", field_types))
 DstInfo = create_model("DstInfo", **prefixed_model("b", field_types))
 
@@ -59,7 +65,7 @@ class DiffInfo(DeltaInfo, PatchlessMetadata, PatchedMetadata):
     def paths_repr(self) -> str:
         """Join a and b paths, in order, with '->' if they differ, else just give one"""
         ap, bp = self.a_rawpath, self.b_rawpath
-        unique_paths = dict.fromkeys([ap, bp])
+        unique_paths = dict.fromkeys(filter(None, [ap, bp]))
         return "{}".format(" -> ".join(map(bytes.decode, unique_paths)))
 
     @computed_field
@@ -118,13 +124,18 @@ def load_diff(config: DiffConfig) -> list[str]:
     diffs: list[str] = []
     with fugit_console.pager_available() as console:
         for patch, info in zip(file_diff_patch, file_diff_info):
-            diff_info = DiffInfo.from_tree_pair(patch=patch, info=info)
+            try:
+                diff_info = DiffInfo.from_tree_pair(patch=patch, info=info)
+            except ValidationError:
+                raise  # TODO: make a nicer custom error and exit
             if discard_diff(diff_info=diff_info, config=config):
                 continue
             filtrate = diff_info.text
             diffs.append(filtrate)
             console.print(diff_info.overview, style="bold yellow underline")
             console.print(filtrate, style="red")
+            console.file_count += 1
+            del diff_info
     return diffs
 
 
