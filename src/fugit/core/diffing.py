@@ -11,6 +11,7 @@ from pydantic import (
     computed_field,
     create_model,
 )
+from rich.text import Text
 
 from ..interfaces import DiffConfig
 from .io import fugit_console
@@ -107,6 +108,24 @@ def count_match(patches, infos) -> None:
         raise ValueError(f"Diff mismatch: {pc} != {ic}")
 
 
+def highlight_diff(diff: str) -> None:
+    """This replaces the highlighter applied by `Console.render_markup`."""
+    # TODO express this as a Rich highlighter class
+    highlight_patterns = {
+        "removed": (r"^\+.*", "green"),
+        "added": (r"^-.*", "red"),
+        "hunk_context": (r"^@@.*", "bold white"),  # applied first (whole line)
+        "hunk_header": (r"^@@.*?@@ ", "blue"),  # applied second (only inside @ signs)
+    }
+    diff_lines = Text(style="white")
+    for line in diff.splitlines(keepends=True):
+        diff_line = Text(line)
+        for pattern, style in highlight_patterns.values():
+            diff_line.highlight_regex(pattern, style=style)
+        diff_lines.append_text(diff_line)
+    return diff_lines
+
+
 def load_diff(config: DiffConfig) -> list[str]:
     """
     Note: You can either implement commit tree-based diffs (with no 'R' kwarg reversal
@@ -133,7 +152,9 @@ def load_diff(config: DiffConfig) -> list[str]:
             filtrate = diff_info.text
             diffs.append(filtrate)
             console.print(diff_info.overview, style="bold yellow underline")
-            console.print(filtrate, style="red")
+            # This simulates the render process (`Console.render_str`)
+            rendered_filtrate = highlight_diff(filtrate)
+            console.print(rendered_filtrate)
             console.file_count += 1
             del diff_info
     return diffs
