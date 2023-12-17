@@ -9,13 +9,24 @@ __all__ = ("FugitConsole", "fugit_console")
 
 class FugitConsole:
     console: Console
-    use_pager: bool
     page_with_styles: bool
+    use_pager: bool
 
-    def __init__(self, use_pager: bool = False, page_with_styles: bool = True):
-        self.console: Console = Console()
-        self.use_pager: bool = use_pager
+    def __init__(
+        self,
+        page_with_styles: bool = True,
+        plain: bool = True,
+        quiet: bool = False,
+        use_pager: bool = True,
+    ):
         self.page_with_styles: bool = page_with_styles
+        self.use_pager: bool = use_pager
+        color_system = None if plain else "auto"
+        self.console = Console(no_color=plain, quiet=quiet, color_system=color_system)
+
+    @property
+    def plain(self) -> bool:
+        return self.console.color_system is None
 
     @contextmanager
     def pager_available(self):
@@ -32,9 +43,8 @@ class FugitConsole:
         no_color (so no bold, italics, etc. either), and avoid broken pipe errors when
         piping to `head` etc.
         """
-        with_style = style if fugit_console.no_color else None
         with SuppressBrokenPipeError():
-            fugit_console.console.print(output, end=end, style=with_style)
+            fugit_console.console.print(output, end=end, style=style)
 
 
 """

@@ -48,7 +48,7 @@ fugit
 
 ```
 usage: fugit [-h] [--repo REPO] [--revision REVISION] [-c [CHANGE_TYPE ...]]
-             [-q] [--version]
+             [-q] [-p] [-n] [--version]
 
 Configure input filtering and output display.
 
@@ -64,6 +64,8 @@ options:
                         Change types to filter diffs for.
                         (type: str, default: ['A', 'C', 'D', 'M', 'R', 'T', 'U', 'X', 'B'])
   -q, --quiet           (default: False)
+  -p, --plain           (default: False)
+  -n, --no-pager        (default: False)
   --version             show program's version number and exit
 ```
 
