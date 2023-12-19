@@ -3,6 +3,7 @@ from textwrap import indent
 
 import defopt
 from pydantic import ValidationError
+from pysnooper import snoop
 
 from ..core.diffing import load_diff
 from ..core.error_handlers import CaptureInvalidConfigExit
@@ -31,7 +32,7 @@ def handle_validation_error(ve: ValidationError) -> None:
     return
 
 
-def run_cli() -> list[str]:
+def run_cli() -> None:
     try:
         config = configure()
     except ValidationError as ve:
@@ -39,5 +40,9 @@ def run_cli() -> list[str]:
         with CaptureInvalidConfigExit():
             configure(argv=["-h"])
     else:
-        diff_text = load_diff(config)
-        return None if not config.quiet else diff_text
+        if config.debug:
+            main = snoop()(load_diff)
+        else:
+            main = load_diff
+        _ = main(config)  # Don't return the list[str] on CLI
+        return None

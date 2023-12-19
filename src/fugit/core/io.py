@@ -4,6 +4,7 @@ from functools import cache
 from rich.console import Console
 
 from ..types import SignedInteger
+from .console import make_console
 from .error_handlers import SuppressBrokenPipeError
 
 __all__ = ("FugitConsole", "fugit_console")
@@ -28,8 +29,7 @@ class FugitConsole:
         self.page_with_styles: bool = page_with_styles
         self.use_pager: bool = use_pager
         self.file_limit: SignedInteger = file_limit
-        color_system = None if plain else "auto"
-        self.console = Console(no_color=plain, quiet=quiet, color_system=color_system)
+        self.console = make_console(plain=plain, quiet=quiet)
 
     @property
     def plain(self) -> bool:

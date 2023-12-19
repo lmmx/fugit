@@ -1,6 +1,7 @@
 from pydantic import BaseModel, TypeAdapter
 from pydantic.types import DirectoryPath
 
+from .debug import DebugConfig
 from .display import DisplayConfig
 
 __all__ = ("FilterConfig", "DiffConfig")
@@ -15,7 +16,7 @@ class RepoConfig(BaseModel):
     revision: str = "HEAD"
 
 
-class DiffConfig(DisplayConfig, FilterConfig, RepoConfig):
+class DiffConfig(DebugConfig, DisplayConfig, FilterConfig, RepoConfig):
     """
     Configure input filtering and output display.
 
