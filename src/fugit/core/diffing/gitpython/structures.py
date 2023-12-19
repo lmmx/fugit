@@ -12,7 +12,7 @@ __all__ = (
     "PatchedMetadata",
     "PatchlessMetadata",
     "DeltaInfo",
-    "DiffInfo",
+    "DiffInfoGP",
 )
 
 
@@ -46,7 +46,7 @@ class DeltaInfo(DstInfo, SrcInfo):
     """
 
 
-class DiffInfo(DeltaInfo, PatchlessMetadata, PatchedMetadata):
+class DiffInfoGP(DeltaInfo, PatchlessMetadata, PatchedMetadata):
     @computed_field
     @property
     def paths_repr(self) -> str:
@@ -66,7 +66,7 @@ class DiffInfo(DeltaInfo, PatchlessMetadata, PatchedMetadata):
         return self.diff.decode()
 
     @classmethod
-    def from_tree_pair(cls, *, patch: Diff, info: Diff) -> DiffInfo:
+    def from_tree_pair(cls, *, patch: Diff, info: Diff) -> DiffInfoGP:
         """Instantiate from GitPython's patched and unpatched tree diffs."""
         delta_info = DeltaInfo.model_validate(patch, from_attributes=True)
         patched = PatchedMetadata.model_validate(patch, from_attributes=True)
@@ -76,4 +76,4 @@ class DiffInfo(DeltaInfo, PatchlessMetadata, PatchedMetadata):
             **patched.model_dump(),
             **no_patch.model_dump(),
         }
-        return DiffInfo.model_validate(merged)
+        return DiffInfoGP.model_validate(merged)

@@ -4,11 +4,13 @@ from git import Repo
 from pydantic import (
     ValidationError,
 )
+from pygit2 import Repository
 from rich.text import Text
 
 from ...interfaces import DiffConfig
 from ..io import fugit_console
-from .gitpython import DiffInfo, count_match, discard_diff_type, get_diff
+from .gitpython import DiffInfoGP, count_match, discard_diff_type, get_diff
+from .pygit2 import DiffInfoPG2
 
 __all__ = ("diff", "load_diff", "highlight_diff")
 
@@ -19,6 +21,13 @@ def diff(**config) -> list[str]:
 
 
 def load_diff(config: DiffConfig) -> list[str]:
+    """Have to use GitPython as pygit2 cached diffs don't work"""
+    return load_diff_gitpython(config)
+    # """Try to get pygit2 cached diffs to work"""
+    # return load_diff_pygit2(config)
+
+
+def load_diff_gitpython(config: DiffConfig) -> list[str]:
     """
     Note: You can either implement commit tree-based diffs (with no 'R' kwarg reversal
     weirdness) or get it from a string at runtime (more configurable so we do that).
@@ -36,7 +45,35 @@ def load_diff(config: DiffConfig) -> list[str]:
     with fugit_console.pager_available() as console:
         for patch, info in zip(file_diff_patch, file_diff_info):
             try:
-                diff_info = DiffInfo.from_tree_pair(patch=patch, info=info)
+                diff_info = DiffInfoGP.from_tree_pair(patch=patch, info=info)
+            except ValidationError:
+                raise  # TODO: make a nicer custom error and exit
+            if discard_diff_type(diff_info=diff_info, config=config):
+                continue
+            filtrate = diff_info.text
+            diffs.append(filtrate)
+            console.print(diff_info.overview, style="bold yellow underline")
+            # This simulates the render process (`Console.render_str`)
+            rendered_filtrate = highlight_diff(filtrate)
+            console.print(rendered_filtrate)
+            console.file_count += 1
+            del diff_info
+    return diffs
+
+
+def load_diff_pygit2(config: DiffConfig) -> list[str]:
+    """
+    Note: You can either implement commit tree-based diffs (with no 'R' kwarg reversal
+    weirdness) or get it from a string at runtime (more configurable so we do that).
+    """
+    repo = Repository(config.repo)
+    tree = config.revision
+    repo_diff_patch = repo.diff(tree, cached=True)
+    diffs: list[str] = []
+    with fugit_console.pager_available() as console:
+        for file_patch in repo_diff_patch:
+            try:
+                diff_info = DiffInfoPG2.model_validate(file_patch, from_attributes=True)
             except ValidationError:
                 raise  # TODO: make a nicer custom error and exit
             if discard_diff_type(diff_info=diff_info, config=config):

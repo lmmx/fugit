@@ -41,7 +41,7 @@ def run_cli() -> None:
             configure(argv=["-h"])
     else:
         if config.debug:
-            main = snoop()(load_diff)
+            main = snoop(depth=4)(load_diff)
         else:
             main = load_diff
         _ = main(config)  # Don't return the list[str] on CLI

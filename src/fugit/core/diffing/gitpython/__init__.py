@@ -1,4 +1,4 @@
 from .operations import count_match, discard_diff_type, get_diff
-from .structures import DiffInfo
+from .structures import DiffInfoGP
 
-__all__ = ("count_match", "discard_diff_type", "get_diff", "DiffInfo")
+__all__ = ("count_match", "discard_diff_type", "get_diff", "DiffInfoGP")

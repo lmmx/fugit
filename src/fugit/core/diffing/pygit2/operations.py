@@ -3,7 +3,7 @@ from __future__ import annotations
 from git import IndexFile
 
 from ....interfaces import DiffConfig
-from .structures import DiffInfoGP
+from .structures import DiffInfoPG2
 
 __all__ = ("get_diff", "count_match", "discard_diff_type")
 
@@ -19,7 +19,7 @@ def get_diff(index: IndexFile, tree: str | None, create_patch: bool):
     return index.diff(tree, create_patch=create_patch, R=reverse)
 
 
-def discard_diff_type(diff_info: DiffInfoGP, config: DiffConfig) -> bool:
+def discard_diff_type(diff_info: DiffInfoPG2, config: DiffConfig) -> bool:
     """
     Filter file-level diffs using info from both patch and metadata diffs.
     Returns a boolean indicating whether the filter config captures or rejects the diff.
