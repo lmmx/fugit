@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 from git import Repo
-from pydantic import (
-    ValidationError,
-)
+from pydantic import ValidationError
 from pygit2 import Repository
 from rich.text import Text
 
@@ -14,6 +12,8 @@ from .pygit2 import DiffInfoPG2
 
 __all__ = ("diff", "load_diff", "highlight_diff")
 
+STORE_DIFFS = False
+
 
 def diff(**config) -> list[str]:
     """Narrow the input type to DiffConfig type for `load_diff`."""
@@ -21,10 +21,10 @@ def diff(**config) -> list[str]:
 
 
 def load_diff(config: DiffConfig) -> list[str]:
-    """Have to use GitPython as pygit2 cached diffs don't work"""
-    return load_diff_gitpython(config)
-    # """Try to get pygit2 cached diffs to work"""
-    # return load_diff_pygit2(config)
+    # """Have to use GitPython as pygit2 cached diffs don't work"""
+    # return load_diff_gitpython(config)
+    """Try to get pygit2 cached diffs to work"""
+    return load_diff_pygit2(config)
 
 
 def load_diff_gitpython(config: DiffConfig) -> list[str]:
@@ -51,7 +51,8 @@ def load_diff_gitpython(config: DiffConfig) -> list[str]:
             if discard_diff_type(diff_info=diff_info, config=config):
                 continue
             filtrate = diff_info.text
-            diffs.append(filtrate)
+            if STORE_DIFFS:
+                diffs.append(filtrate)
             console.print(diff_info.overview, style="bold yellow underline")
             # This simulates the render process (`Console.render_str`)
             rendered_filtrate = highlight_diff(filtrate)
@@ -79,7 +80,8 @@ def load_diff_pygit2(config: DiffConfig) -> list[str]:
             if discard_diff_type(diff_info=diff_info, config=config):
                 continue
             filtrate = diff_info.text
-            diffs.append(filtrate)
+            if STORE_DIFFS:
+                diffs.append(filtrate)
             console.print(diff_info.overview, style="bold yellow underline")
             # This simulates the render process (`Console.render_str`)
             rendered_filtrate = highlight_diff(filtrate)
