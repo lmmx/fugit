@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 from contextlib import contextmanager
 from functools import cache
 
 from rich.console import Console
+from rich.text import Text
 
 from ..types import SignedInteger
 from .console import make_console
@@ -17,6 +20,7 @@ class FugitConsole:
     use_pager: bool
     file_limit: SignedInteger
     file_count: int = 0
+    printer_queue: list[Text] = []
 
     def __init__(
         self,
@@ -35,28 +39,39 @@ class FugitConsole:
     def plain(self) -> bool:
         return self.console.color_system is None
 
+    @property
+    def overflows_terminal(self) -> bool:
+        terminal_height = self.console.size.height
+        text_height = len(self.printer_queue)
+        return terminal_height < text_height
+
     @contextmanager
     def pager_available(self):
         """Uses console pagination if `DisplayConfig` switched this setting on."""
-        if self.use_pager:
+        yield self
+        if self.use_pager and self.overflows_terminal:
             with self.console.pager(styles=self.page_with_styles):
-                yield self
+                self.print_all()
         else:
-            yield self
+            self.print_all()
 
-    def print(self, output: str, end="", style=None) -> None:
+    def submit(self, *output: Text) -> None:
         """
         Report output through the rich console, but don't style at all if rich was set to
         no_color (so no bold, italics, etc. either), and avoid broken pipe errors when
         piping to `head` etc.
         """
+        if self.file_limit != -0.0:
+            if self.file_count == self.file_limit:
+                raise SystemExit(0)
+            if not self.file_limit.is_positive:
+                raise NotImplementedError("Tail not implemented yet")
+        self.printer_queue.extend(output)
+
+    def print_all(self) -> None:
+        """Print the queue"""
         with SuppressBrokenPipeError():
-            if self.file_limit != -0.0:
-                if self.file_count == self.file_limit:
-                    raise SystemExit(0)
-                if not self.file_limit.is_positive:
-                    raise NotImplementedError("Tail not implemented yet")
-            self.console.print(output, end=end, style=style)
+            self.console.print(*self.printer_queue, sep="")
 
 
 """
