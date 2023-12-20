@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from git import Repo
-from pydantic import ValidationError
+from pydantic import TypeAdapter, ValidationError
 from pygit2 import Repository
 from rich.text import Text
 
@@ -72,12 +72,9 @@ def load_diff_pygit2(config: DiffConfig) -> list[str]:
     repo_diff_patch = repo.diff(tree, cached=True)
     diffs: list[str] = []
     with fugit_console.pager_available() as console:
-        for file_patch in repo_diff_patch:
-            try:
-                diff_info = DiffInfoPG2.model_validate(file_patch, from_attributes=True)
-            except ValidationError:
-                raise  # TODO: make a nicer custom error and exit
-            if discard_diff_type(diff_info=diff_info, config=config):
+        ta = TypeAdapter(list[DiffInfoPG2])
+        for diff_info in ta.validate_python(repo_diff_patch, from_attributes=True):
+            if diff_info.change_type not in config.change_type:
                 continue
             filtrate = diff_info.text
             if STORE_DIFFS:
