@@ -14,6 +14,7 @@ class FilterConfig(BaseModel):
 class RepoConfig(BaseModel):
     repo: DirectoryPath = "."
     revision: str = "HEAD"
+    pygit2: bool = False
 
 
 class DiffConfig(DebugConfig, DisplayConfig, FilterConfig, RepoConfig):

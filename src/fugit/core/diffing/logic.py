@@ -24,7 +24,7 @@ def load_diff(config: DiffConfig) -> list[str]:
     # """Have to use GitPython as pygit2 cached diffs don't work"""
     # return load_diff_gitpython(config)
     """Try to get pygit2 cached diffs to work"""
-    return load_diff_pygit2(config)
+    return load_diff_pygit2(config) if config.pygit2 else load_diff_gitpython(config)
 
 
 def load_diff_gitpython(config: DiffConfig) -> list[str]:
