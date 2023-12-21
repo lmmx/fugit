@@ -5,6 +5,8 @@ import defopt
 from pydantic import ValidationError
 from pysnooper import snoop
 
+from fugit.interfaces.display import configure_global_console
+
 from ..core.diffing import load_diff
 from ..core.error_handlers import CaptureInvalidConfigExit
 from ..interfaces import DiffConfig
@@ -40,6 +42,7 @@ def run_cli() -> None:
         with CaptureInvalidConfigExit():
             configure(argv=["-h"])
     else:
+        configure_global_console(config)
         if config.debug:
             main = snoop(depth=1, relative_time=True)(load_diff)
         else:
