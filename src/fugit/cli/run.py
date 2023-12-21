@@ -14,6 +14,15 @@ from ..interfaces import DiffConfig, configure_global_console
 __all__ = ("run_cli",)
 
 
+def stringify_hint(type_hint) -> str:
+    match type_hint:
+        case type():
+            hint = type_hint.__name__
+        case _:
+            hint = str(type_hint)
+    return hint
+
+
 def populate_parser_descriptions(parser: ArgumentParser, struct: Callable) -> None:
     hints = get_type_hints(struct, include_extras=True)
     for action in parser._actions:
@@ -21,14 +30,11 @@ def populate_parser_descriptions(parser: ArgumentParser, struct: Callable) -> No
             if get_origin(hints[flag]) is Annotated:
                 type_hint, meta = get_args(hints[flag])
                 desc = meta.description + " "
-                match type_hint:
-                    case type():
-                        hint = type_hint.__name__
-                    case _:
-                        hint = str(type_hint)
+                hint = stringify_hint(type_hint)
             else:
                 # If the type is unannotated no meta so no description
-                hint, desc = hints[flag], ""
+                desc = ""
+                hint = stringify_hint(hints[flag])
             action.help = f"{desc}(type: {hint}, default: {action.help})"
 
 
