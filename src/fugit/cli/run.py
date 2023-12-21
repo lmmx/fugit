@@ -5,7 +5,7 @@ import defopt
 from pydantic import ValidationError
 from pysnooper import snoop
 
-from fugit.interfaces.display import configure_global_console
+from fugit.interfaces import configure_global_console
 
 from ..core.diffing import load_diff
 from ..core.error_handlers import CaptureInvalidConfigExit

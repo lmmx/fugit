@@ -1,23 +1,30 @@
-from pydantic import BaseModel, TypeAdapter
-from pydantic.types import DirectoryPath
+from pydantic import BaseModel
 
-from .debug import DebugConfig
-from .display import DisplayConfig
+from ..core import io
+from ..core.io import FugitConsole
 
-__all__ = ("FilterConfig", "DiffConfig")
+__all__ = ("DebugConfig", "DisplayConfig", "DiffConfig", "configure_global_console")
 
 
-class FilterConfig(BaseModel):
+class DebugConfig(BaseModel):
+    debug: bool = False
+
+
+class DisplayConfig(DebugConfig):
+    quiet: bool = False
+    plain: bool = False
+    no_pager: bool = False
+    file_limit: int = 0
+
+
+class RepoConfig(DisplayConfig):
     change_type: list[str] = list("ACDMRTUXB")
-
-
-class RepoConfig(BaseModel):
-    repo: DirectoryPath = "."
+    repo: str = "."
     revision: str = "HEAD"
     pygit2: bool = False
 
 
-class DiffConfig(DebugConfig, DisplayConfig, FilterConfig, RepoConfig):
+class DiffConfig(RepoConfig):
     """
     Configure input filtering and output display.
 
@@ -29,4 +36,11 @@ class DiffConfig(DebugConfig, DisplayConfig, FilterConfig, RepoConfig):
     """
 
 
-DiffConfig.adapt = TypeAdapter(DiffConfig).validate_python
+def configure_global_console(config: DiffConfig) -> None:
+    """Turn on rich colourful printing to stdout if `config.plain` is set to False."""
+    io.fugit_console = FugitConsole(
+        plain=config.plain,
+        quiet=config.quiet,
+        use_pager=not config.no_pager,
+        file_limit=config.file_limit,
+    )
