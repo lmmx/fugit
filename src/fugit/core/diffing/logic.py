@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Annotated
 
 from git import Repo
 from line_profiler import profile
-from pydantic import AfterValidator, TypeAdapter, ValidationError
+from pydantic import TypeAdapter, ValidationError
 from pygit2 import Repository
 
 from ...interfaces import DiffConfig
@@ -44,7 +43,8 @@ def process_diff(
     diffs: list[str],
     config: DiffConfig,
 ) -> None:
-    ...
+    if config.change_type and (diff_info.change_type not in config.change_type):
+        return
     filtrated = diff_info.text
     if STORE_DIFFS:
         diffs.append(filtrated)
@@ -104,10 +104,7 @@ def load_diff_pygit2(config: DiffConfig) -> list[str]:
     repo_diff_patch = repo.diff(tree, cached=True)
     diffs: list[str] = []
     with fugit_console.pager() as console:
-        ct_checker = ChangeTypeChecker(change_types=config.change_type)
-        ct_validator = AfterValidator(ct_checker.check)
-        ct_gate = Annotated[DiffInfoPG2, ct_validator]
-        ta = TypeAdapter(list[ct_gate | None])
+        ta = TypeAdapter(list[DiffInfoPG2])
         validated_diffs = ta.validate_python(repo_diff_patch, from_attributes=True)
         for diff_info in filter(None, validated_diffs):
             process_diff(

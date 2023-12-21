@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from msgspec import Meta, Struct, field
+from msgspec import Meta, Struct
 
 from ..core import io
 from ..core.io import FugitConsole
@@ -25,7 +25,7 @@ class DisplayConfig(DebugConfig):
 
 
 class RepoConfig(DisplayConfig):
-    change_type: desc(list[str], "Filter diff hunk types") = field(default_factory=list)
+    change_type: desc(list[str], "Filter diff hunk types") = []
     repo: desc(str, "The repo whose git diff is to be computed") = "."
     revision: desc(str, "The commit for comparison with the index") = "HEAD"
     pygit2: desc(bool, "Use the pygit2 backend rather than GitPython") = False
