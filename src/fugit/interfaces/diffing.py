@@ -1,4 +1,6 @@
-from pydantic import BaseModel
+from typing import Annotated
+
+from msgspec import Meta, Struct, field
 
 from ..core import io
 from ..core.io import FugitConsole
@@ -6,33 +8,34 @@ from ..core.io import FugitConsole
 __all__ = ("DebugConfig", "DisplayConfig", "DiffConfig", "configure_global_console")
 
 
-class DebugConfig(BaseModel):
-    debug: bool = False
+def desc(typ, description: str):
+    """Annotate a `msgspec.Struct` field's type with a description"""
+    return Annotated[typ, Meta(description=description)]
+
+
+class DebugConfig(Struct):
+    debug: desc(bool, "Run debug diagnostics") = False
 
 
 class DisplayConfig(DebugConfig):
-    quiet: bool = False
-    plain: bool = False
-    no_pager: bool = False
-    file_limit: int = 0
+    quiet: desc(bool, "Print nothing at all") = False
+    plain: desc(bool, "Don't apply any kind of text styling") = False
+    no_pager: desc(bool, "Don't send output to the system pager") = False
+    file_limit: desc(int, "Stop after a certain number of files match the filters") = 0
 
 
 class RepoConfig(DisplayConfig):
-    change_type: list[str] = list("ACDMRTUXB")
-    repo: str = "."
-    revision: str = "HEAD"
-    pygit2: bool = False
+    change_type: desc(list[str], "Filter diff hunk types") = field(default_factory=list)
+    repo: desc(str, "The repo whose git diff is to be computed") = "."
+    revision: desc(str, "The commit for comparison with the index") = "HEAD"
+    pygit2: desc(bool, "Use the pygit2 backend rather than GitPython") = False
 
 
 class DiffConfig(RepoConfig):
     """
-    Configure input filtering and output display.
-
-      :param repo: The repo whose git diff is to be computed.
-      :param revision: Specify the commit for comparison with the index. Use "HEAD" to
-                       refer to the latest branch commit, or "HEAD~{$n}" (e.g. "HEAD~1")
-                       to indicate a specific number of commits before the latest.
-      :param change_type: Change types to filter diffs for.
+    Configure input filtering and output display. Using "HEAD" as the `revision` will
+    refer to the latest branch commit, while "HEAD~{$n}" (e.g. "HEAD~1") will indicate
+    a specific number of commits before the latest.
     """
 
 

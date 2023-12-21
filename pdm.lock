@@ -5,7 +5,7 @@
 groups = ["default", "test", "develop", "mkdocs", "docs"]
 strategy = ["cross_platform"]
 lock_version = "4.4.1"
-content_hash = "sha256:1a9136442c1203a3cb51dfd0cb895a0f019b5ce15c369ec188ae7b823e77e019"
+content_hash = "sha256:45ca1428100c0ee17776c6e37f93a47fa0b242f83afacff4c87c10fc3adf387a"
 
 [[package]]
 name = "annotated-types"
@@ -340,6 +340,31 @@ version = "3.0.1"
 summary = "JavaScript minifier."
 files = [
     {file = "jsmin-3.0.1.tar.gz", hash = "sha256:c0959a121ef94542e807a674142606f7e90214a2b3d1eb17300244bbb5cc2bfc"},
+]
+
+[[package]]
+name = "line-profiler"
+version = "4.1.2"
+requires_python = ">=3.6"
+summary = "Line-by-line profiler"
+files = [
+    {file = "line_profiler-4.1.2-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:4344c1504ad1a57029a8ab30812d967a0917cad7b654077e8787e4a7d7ea3469"},
+    {file = "line_profiler-4.1.2-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:0720b356db3e9ca297c3260f280c5be3bb4b230eda61ce73b4df5e553418d37a"},
+    {file = "line_profiler-4.1.2-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:09f742af37166768f92495bd3d3a71da1ba41d3004307a66c108f29ed947d6e1"},
+    {file = "line_profiler-4.1.2-cp310-cp310-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:443a5df10eb7910df694340c8a81c1668a88bb59ca44149a3291f7b2ae960891"},
+    {file = "line_profiler-4.1.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a906f9d1687eea7e5b22e3bd367d4b63706fcea1906baaad76b1cc4c1142553d"},
+    {file = "line_profiler-4.1.2-cp310-cp310-musllinux_1_1_i686.whl", hash = "sha256:e3b2c8cc34a776c5cfaa4a4a09a51541efcc9082dce15b19e494000e82576ced"},
+    {file = "line_profiler-4.1.2-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:55ca0a78eb8d52515486c374ec53fa9e65e3c4128e8bbc909d8bfce267a91fdd"},
+    {file = "line_profiler-4.1.2-cp310-cp310-win_amd64.whl", hash = "sha256:f4a11389f06831d7984b63be0743fbbbae1ffb56fad04b4e538d3e6933b5c265"},
+    {file = "line_profiler-4.1.2-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:32fa07f6fecfd209329559e4ae945dc7bdc0703355c8924bbf19101495b2373f"},
+    {file = "line_profiler-4.1.2-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:6f8e9e8af6660629f214e424613c56a6622cf36d9c638c569c926b21374d7029"},
+    {file = "line_profiler-4.1.2-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:4753113c4e2c30a547937dbc456900d7f3a1b99bc8bc81a640a89306cd729c0f"},
+    {file = "line_profiler-4.1.2-cp311-cp311-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:7f0989302404850a2a041ba60afe6c7240aea10fdd9432d5c1d464aca39a0369"},
+    {file = "line_profiler-4.1.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9f4b25ee412b0cd624614edd16c4c0af02dbeb73db2a08a49a14b120005a5630"},
+    {file = "line_profiler-4.1.2-cp311-cp311-musllinux_1_1_i686.whl", hash = "sha256:93c6a49009ee75dcd8ff644c5fd39eeb8bb672d5a41bacdd239db14ae1ba3098"},
+    {file = "line_profiler-4.1.2-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:b96964cdb306741a01b95d210d634cc79ed70d2904336cbd8f69a9b5f284426d"},
+    {file = "line_profiler-4.1.2-cp311-cp311-win_amd64.whl", hash = "sha256:46a8cad2cb4b6a1229ddccf06694b1d01fd5acd1cf8c502caf937765a7c877de"},
+    {file = "line_profiler-4.1.2.tar.gz", hash = "sha256:aa56578b0ff5a756fe180b3fda7bd67c27bbd478b3d0124612d8cf00e4a21df2"},
 ]
 
 [[package]]
