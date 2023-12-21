@@ -9,13 +9,9 @@ from pygit2 import Repository
 
 from ...interfaces import DiffConfig
 from ..io import FugitConsole, fugit_console
-from ..text.bases import SpannedText, Style
-from ..text.palette import (
-    BoldYellow_Text,
-    GreenText,
-    RedText,
-    SimpleLine,
-)
+from ..text.bases import Span, SpannedText, Style
+from ..text.palette import BoldYellow_Text, GreenText, RedText, SimpleLine
+from ..text.scanning import compile_re
 from .gitpython import DiffInfoGP, count_match, get_diff
 from .pygit2 import DiffInfoPG2
 
@@ -65,6 +61,15 @@ highlight_patterns = {
 }
 
 
+def highlight_regex(line: SpannedText, style_patterns: list[tuple[str, str]]) -> None:
+    for pattern, style in style_patterns:
+        for hit in compile_re(pattern).finditer(line.line):
+            start, stop = hit.span()
+            span = Span(start=start, stop=stop, style=style)
+            line.spans.append(span)
+    return
+
+
 @profile
 def highlight_diff(diff: str) -> list[SimpleLine, SpannedText]:
     """This replaces the highlighter applied by `Console.render_markup`."""
@@ -81,7 +86,7 @@ def highlight_diff(diff: str) -> list[SimpleLine, SpannedText]:
                 diff_line = SpannedText(line=line)
                 match initial_char:
                     case "@":
-                        diff_line.highlight_regex(list(highlight_patterns.values()))
+                        highlight_regex(diff_line, list(highlight_patterns.values()))
                 diff_lines.append(diff_line)
     return diff_lines
 

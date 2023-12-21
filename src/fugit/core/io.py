@@ -110,11 +110,11 @@ class FugitConsole:
         if self.plain:
             for segment in feed:
                 # if isinstance(segment, TextLine):
-                #     yeet(segment.root)
+                #     yeet(segment.line)
                 match segment:
                     case TextLine():
                         # add the colour here from its name `segment.__doc__`
-                        yeet(segment.root)
+                        yeet(segment.line)
                     case SpannedText():
                         # add the colour here from its style attribute (Style enum)
                         yeet(segment.line)
