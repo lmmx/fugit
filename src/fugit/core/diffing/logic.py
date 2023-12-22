@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+import msgspec
 from git import Repo
 from line_profiler import profile
-from pydantic import TypeAdapter, ValidationError
+from pydantic import ValidationError
 from pygit2 import Repository
 
 from ...interfaces import DiffConfig
@@ -109,8 +110,11 @@ def load_diff_pygit2(config: DiffConfig) -> list[str]:
     repo_diff_patch = repo.diff(tree, cached=True)
     diffs: list[str] = []
     with fugit_console.pager() as console:
-        ta = TypeAdapter(list[DiffInfoPG2])
-        validated_diffs = ta.validate_python(repo_diff_patch, from_attributes=True)
+        validated_diffs = msgspec.convert(
+            list(repo_diff_patch),
+            list[DiffInfoPG2],
+            from_attributes=True,
+        )
         for diff_info in filter(None, validated_diffs):
             process_diff(
                 console=console,

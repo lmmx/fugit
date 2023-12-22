@@ -1,13 +1,14 @@
 from __future__ import annotations
 
-from typing import Annotated, Literal
+from enum import Enum, IntEnum
+from typing import Literal
 
-from pydantic import BaseModel, BeforeValidator
+from msgspec import Struct
 
 __all__ = ("DiffInfoPG2",)
 
 
-class DiffFile(BaseModel):
+class DiffFile(Struct):
     # flags: int
     # id: Annotated[str, BeforeValidator(str)]  # hex string coerced from `Oid` class
     # mode: int
@@ -16,18 +17,57 @@ class DiffFile(BaseModel):
     # size: int
 
 
-class DiffDelta(BaseModel):
+class GitDeltaStatus(Enum):
+    UNMODIFIED = ""  # This one is not defined, I added it
+    ADDED = "A"
+    DELETED = "D"
+    MODIFIED = "M"
+    RENAMED = "R"
+    COPIED = "C"
+    IGNORED = "I"
+    UNTRACKED = "?"
+    TYPECHANGE = "T"
+    UNREADABLE = "X"
+    UNKNOWN = " "
+
+    @staticmethod
+    def from_status(status: str) -> GitDeltaStatus:
+        for name, member in GitDeltaStatus.__members__.items():
+            if member.value == status:
+                return member
+        return GitDeltaStatus.UNKNOWN
+
+
+class DeltaStatus(IntEnum):
+    """
+    Taken directly from pygit2 (`diff.h`).
+    """
+
+    UNMODIFIED = 0
+    ADDED = 1  # A
+    DELETED = 2  # D
+    MODIFIED = 3  # M
+    RENAMED = 4  # R
+    COPIED = 5  # C
+    IGNORED = 6
+    UNTRACKED = 7
+    TYPECHANGE = 8
+    UNREADABLE = 9
+    CONFLICTED = 10
+
+
+class DiffDelta(Struct):
     # flags: int
     # is_binary: bool
     new_file: DiffFile
     # nfiles: int
     old_file: DiffFile
     # similarity: int
-    # status: int
-    status_char: Annotated[str, BeforeValidator(lambda method: method.__call__())]
+    status: DeltaStatus
+    # status_char: str  # Annotated[str, BeforeValidator(lambda method: method.__call__())]
 
 
-class DiffLine(BaseModel):
+class DiffLine(Struct):
     content: str
     content_offset: int
     new_lineno: int
@@ -37,7 +77,7 @@ class DiffLine(BaseModel):
     # raw_content: bytes
 
 
-class DiffHunk(BaseModel):
+class DiffHunk(Struct):
     # new_start: int
     # new_lines: int
     # old_start: int
@@ -47,7 +87,7 @@ class DiffHunk(BaseModel):
     lines: list[DiffLine]
 
 
-class DiffPatch(BaseModel):
+class DiffPatch(Struct):
     delta: DiffDelta
     hunks: list[DiffHunk]
     text: str
@@ -72,7 +112,7 @@ class DiffPatch(BaseModel):
 class DiffInfoPG2(DiffPatch):
     @property
     def change_type(self) -> str:
-        return self.delta.status_char
+        return GitDeltaStatus[self.delta.status.name].value
 
     @property
     def paths_repr(self) -> str:
