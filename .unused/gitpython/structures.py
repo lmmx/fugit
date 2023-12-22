@@ -2,9 +2,11 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
+# from pydantic import BaseModel, ConfigDict, computed_field, create_model
 from git import Diff
 from git.objects.blob import Blob
-from pydantic import BaseModel, ConfigDict, computed_field, create_model
+
+# TODO: convert to msgspec
 
 __all__ = (
     "SrcInfo",

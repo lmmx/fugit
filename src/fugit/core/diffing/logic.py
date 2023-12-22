@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-
 import msgspec
-from git import Repo
 from line_profiler import profile
-from pydantic import ValidationError
+
+# from git import Repo
+# from pydantic import ValidationError
 from pygit2 import Repository
 
 from ...interfaces import DiffConfig
@@ -13,12 +12,14 @@ from ..io import FugitConsole, fugit_console
 from ..text.bases import Span, SpannedText, Style
 from ..text.palette import BoldYellow_Text, GreenText, RedText, SimpleLine
 from ..text.scanning import compile_re
-from .gitpython import DiffInfoGP, count_match, get_diff
+
+# from .gitpython import DiffInfoGP, count_match, get_diff
 from .pygit2 import DiffInfoPG2
 
 __all__ = ("diff", "load_diff", "highlight_diff", "process_diff")
 
 STORE_DIFFS = False
+DiffInfoGP = None  # Not migrated
 
 
 def diff(**config) -> list[str]:
@@ -30,7 +31,8 @@ def load_diff(config: DiffConfig) -> list[str]:
     # """Have to use GitPython as pygit2 cached diffs don't work"""
     # return load_diff_gitpython(config)
     """Try to get pygit2 cached diffs to work"""
-    return load_diff_pygit2(config) if config.pygit2 else load_diff_gitpython(config)
+    # FIXME Decommission GitPython until it is migrated to msgspec
+    return load_diff_pygit2(config)  # if config.pygit2 else load_diff_gitpython(config)
 
 
 @profile
@@ -92,14 +94,6 @@ def highlight_diff(diff: str) -> list[SimpleLine, SpannedText]:
     return diff_lines
 
 
-@dataclass
-class ChangeTypeChecker:
-    change_types: list[str]
-
-    def check(self, diff: DiffInfoPG2) -> DiffInfoPG2 | None:
-        return diff if (diff.change_type in self.change_types) else None
-
-
 def load_diff_pygit2(config: DiffConfig) -> list[str]:
     """
     Note: You can either implement commit tree-based diffs (with no 'R' kwarg reversal
@@ -126,32 +120,32 @@ def load_diff_pygit2(config: DiffConfig) -> list[str]:
     return diffs
 
 
-def load_diff_gitpython(config: DiffConfig) -> list[str]:
-    """
-    Note: You can either implement commit tree-based diffs (with no 'R' kwarg reversal
-    weirdness) or get it from a string at runtime (more configurable so we do that).
-    For reference, you would do it like this rather than ``config.revision``:
-
-      >>> tree = repo.head.commit.tree
-    """
-    repo = Repo(config.repo, search_parent_directories=True)
-    index = repo.index
-    tree = config.revision
-    file_diff_patch = get_diff(index, tree, create_patch=True)
-    file_diff_info = get_diff(index, tree, create_patch=False)
-    count_match(file_diff_patch, file_diff_info)
-    diffs: list[str] = []
-    with fugit_console.pager() as console:
-        for patch, info in zip(file_diff_patch, file_diff_info):
-            try:
-                diff_info = DiffInfoGP.from_tree_pair(patch=patch, info=info)
-            except ValidationError:
-                raise  # TODO: make a nicer custom error and exit
-            process_diff(
-                console=console,
-                diff_info=diff_info,
-                diffs=diffs,
-                config=config,
-            )
-            del diff_info
-    return diffs
+# def load_diff_gitpython(config: DiffConfig) -> list[str]:
+#     """
+#     Note: You can either implement commit tree-based diffs (with no 'R' kwarg reversal
+#     weirdness) or get it from a string at runtime (more configurable so we do that).
+#     For reference, you would do it like this rather than ``config.revision``:
+#
+#       >>> tree = repo.head.commit.tree
+#     """
+#     repo = Repo(config.repo, search_parent_directories=True)
+#     index = repo.index
+#     tree = config.revision
+#     file_diff_patch = get_diff(index, tree, create_patch=True)
+#     file_diff_info = get_diff(index, tree, create_patch=False)
+#     count_match(file_diff_patch, file_diff_info)
+#     diffs: list[str] = []
+#     with fugit_console.pager() as console:
+#         for patch, info in zip(file_diff_patch, file_diff_info):
+#             try:
+#                 diff_info = DiffInfoGP.from_tree_pair(patch=patch, info=info)
+#             except ValidationError:
+#                 raise  # TODO: make a nicer custom error and exit
+#             process_diff(
+#                 console=console,
+#                 diff_info=diff_info,
+#                 diffs=diffs,
+#                 config=config,
+#             )
+#             del diff_info
+#     return diffs
