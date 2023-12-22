@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from os import get_terminal_size
 
-from pydantic import ConfigDict, ImportString, RootModel
-
 __all__ = ("TerminalDimensions", "SystemPager")
 
 
@@ -22,10 +20,7 @@ class TerminalDimensions:
         return
 
 
-class SystemPager(RootModel):
-    model_config: ConfigDict = ConfigDict(validate_default=True)
-    root: ImportString = "pydoc.pager"
-
+class SystemPager:
     def show(self, content: str):
         assert isinstance(content, str)
-        return self.root(content)
+        return __import__("pydoc.pager")(content)
