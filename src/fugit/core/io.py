@@ -37,7 +37,9 @@ class PagerContext:
             segments: Iterable[str] = buffer
             with SuppressBrokenPipeError():
                 content = self._console._render_buffer(segments)
-                if self.enabled:
+                last_newline = content.rfind("\n", 1)
+                content = content[:last_newline] + content[last_newline + 1 :]
+                if self.enabled and self._console.overflows_terminal():
                     self.pager.show(content)
                 else:
                     print(content)
@@ -50,6 +52,7 @@ class FugitConsole:
     use_pager: bool
     file_limit: int
     file_count: int = 0
+    line_count: int = 0
     printer_queue: list[str] = []
 
     def __init__(
@@ -71,11 +74,11 @@ class FugitConsole:
 
     def overflows_terminal(self) -> bool:
         terminal_height = self.size().height
-        text_height = len(self.printer_queue)
+        text_height = self.line_count
         return terminal_height < text_height
 
     def pager(self, styles: bool = True, enabled: bool = True) -> PagerContext:
-        active = self.use_pager and self.overflows_terminal()
+        active = self.use_pager
         return PagerContext(self, styles=styles, enabled=active)
 
     def submit(self, *output: str) -> None:

@@ -23,4 +23,4 @@ class TerminalDimensions:
 class SystemPager:
     def show(self, content: str):
         assert isinstance(content, str)
-        return __import__("pydoc.pager")(content)
+        return __import__("pydoc").pager(content)
