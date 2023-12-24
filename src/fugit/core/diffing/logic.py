@@ -10,7 +10,7 @@ from pygit2 import Repository
 from ...interfaces import DiffConfig
 from ..io import FugitConsole, fugit_console
 from ..text.bases import Span, SpannedText, Style
-from ..text.palette import BoldYellow_Text, GreenText, RedText, SimpleLine
+from ..text.palette import BLUE, BOLD, BOLD_YELLOW_US, GREEN, RED, RESET, WHITE
 from ..text.scanning import compile_re
 
 # from .gitpython import DiffInfoGP, count_match, get_diff
@@ -47,13 +47,17 @@ def process_diff(
     filtrated = diff_info.text
     if STORE_DIFFS:
         diffs.append(filtrated)
-    header = diff_info.overview if config.plain else BoldYellow_Text(diff_info.overview)
-    # This simulates the render process (`Console.render_str`)
     if config.plain:
-        highlighted = filtrated.splitlines(keepends=True)
+        header = (diff_info.overview,)
     else:
-        highlighted = highlight_diff(filtrated)
-    console.submit(header, *highlighted)
+        header = (BOLD_YELLOW_US, diff_info.overview, RESET)
+    # This simulates the render process (`Console.render_str`)
+    highlightable_lines = filtrated.splitlines(keepends=True)
+    if config.plain:
+        highlighted = highlightable_lines
+    else:
+        highlighted = highlight_diff(highlightable_lines)
+    console.submit(*header, *highlighted)
     console.file_count += 1
     return
 
@@ -74,26 +78,43 @@ def highlight_regex(line: SpannedText, style_patterns: list[tuple[str, str]]) ->
 
 
 @profile
-def highlight_diff(diff: str) -> list[SimpleLine, SpannedText]:
+def highlight_diff(source_lines: list[str]) -> list[str]:
     """This replaces the highlighter applied by `Console.render_markup`."""
     diff_lines = []
-    for line in diff.splitlines(keepends=True):
-        match initial_char := line[0]:
+    for line in source_lines:
+        match line[0]:
+            case "d" | "i":
+                continue  # diff or index
             case "+":
-                diff_lines.append(GreenText(line))
+                if line[1] == "+":
+                    continue
+                diff_lines.extend([GREEN, line, RESET])
                 continue
             case "-":
-                diff_lines.append(RedText(line))
+                if line[1] == "-":
+                    continue
+                diff_lines.extend([RED, line, RESET])
+                continue
+            case " ":
+                diff_lines.extend([WHITE, line, RESET])
+                continue
+            case "@":
+                # highlight_regex(diff_line, list(highlight_patterns.values()))
+                hed_cutoff = line[2:].find("@@") + 4
+                hed_span = line[:hed_cutoff]
+                rest_span = line[hed_cutoff:]
+                diff_lines.extend([BOLD, BLUE, hed_span, RESET, rest_span])
                 continue
             case _:
-                diff_line = SpannedText(line=line)
-                match initial_char:
-                    case "@":
-                        highlight_regex(diff_line, list(highlight_patterns.values()))
-                diff_lines.append(diff_line)
+                diff_lines.extend([line])
+                # diff_line = SpannedText(line=line)
+                # match initial_char:
+                #     case "@":
+                # diff_lines.append(diff_line)
     return diff_lines
 
 
+@profile
 def load_diff_pygit2(config: DiffConfig) -> list[str]:
     """
     Note: You can either implement commit tree-based diffs (with no 'R' kwarg reversal

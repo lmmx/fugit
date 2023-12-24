@@ -1,56 +1,9 @@
-from __future__ import annotations
+__all__ = ("BOLD", "BOLD_YELLOW_US", "RED", "GREEN", "BLUE", "WHITE", "RESET")
 
-from typing import Union
-
-from .bases import Style, TextLine
-from .escaping import esc_pair
-
-__all__ = (
-    "RedText",
-    "GreenText",
-    "BlueText",
-    "WhiteText",
-    "BoldWhiteText",
-    "BoldYellow_Text",
-    "SimpleLine",
-    "PALETTE",
-)
-
-
-class RedText(TextLine):
-    """red"""
-
-
-class GreenText(TextLine):
-    """green"""
-
-
-class BlueText(TextLine):
-    """blue"""
-
-
-class WhiteText(TextLine):
-    """white"""
-
-
-class BoldWhiteText(TextLine):
-    """bold white"""
-
-
-class BoldYellow_Text(TextLine):
-    """bold yellow underline"""
-
-
-# Union of all the simple model types
-SimpleLine = Union[
-    RedText,
-    GreenText,
-    BlueText,
-    WhiteText,
-    BoldWhiteText,
-    BoldYellow_Text,
-]
-
-# Test the Style Enum's completeness
-# {'r': <class 'fugit.core.text.palette.RedText'>, ...
-PALETTE = {Style(c.__doc__).name: esc_pair(c) for c in TextLine.__subclasses__()}
+BOLD = "\033[1m"
+BOLD_YELLOW_US = "\033[1m\033[4m\033[33m"
+RED = f"\033[{31}m"
+GREEN = f"\033[{32}m"
+BLUE = f"\033[{94}m"
+WHITE = f"\033[{37}m"
+RESET = f"\033[{0}m"

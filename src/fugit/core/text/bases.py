@@ -4,7 +4,7 @@ from enum import Enum
 
 from msgspec import Struct
 
-__all__ = ("Style", "Span", "TextLine", "SpannedText")
+__all__ = ("Style", "Span", "SpannedText")
 
 
 class Style(Enum):
@@ -20,10 +20,6 @@ class Span(Struct):
     start: int
     stop: int
     style: Style
-
-
-class TextLine(Struct):
-    line: str
 
 
 class SpannedText(Struct):

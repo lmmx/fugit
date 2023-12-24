@@ -6,8 +6,6 @@ from types import TracebackType
 
 from .error_handlers import SuppressBrokenPipeError
 from .paging import SystemPager, TerminalDimensions
-from .text.bases import SpannedText, TextLine
-from .text.palette import SimpleLine
 
 __all__ = ("PagerContext", "FugitConsole", "fugit_console")
 
@@ -34,10 +32,9 @@ class PagerContext:
         exc_tb: TracebackType | None,
     ) -> None:
         if exc_type is None:
-            # Do this part in threads?
-            buffer: list[SimpleLine | SpannedText] = self._console.printer_queue[:]
+            buffer: list[str] = self._console.printer_queue[:]
             del self._console.printer_queue[:]
-            segments: Iterable[SimpleLine | SpannedText] = buffer
+            segments: Iterable[str] = buffer
             with SuppressBrokenPipeError():
                 content = self._console._render_buffer(segments)
                 if self.enabled:
@@ -53,7 +50,7 @@ class FugitConsole:
     use_pager: bool
     file_limit: int
     file_count: int = 0
-    printer_queue: list[SimpleLine | SpannedText] = []
+    printer_queue: list[str] = []
 
     def __init__(
         self,
@@ -81,7 +78,7 @@ class FugitConsole:
         active = self.use_pager and self.overflows_terminal()
         return PagerContext(self, styles=styles, enabled=active)
 
-    def submit(self, *output: SimpleLine | SpannedText) -> None:
+    def submit(self, *output: str) -> None:
         """
         Report output through the rich console, but don't style at all if console was set to
         plain (so no bold, italics, etc. either), and avoid broken pipe errors when
@@ -101,31 +98,11 @@ class FugitConsole:
 
     def _render_buffer(
         self,
-        feed: list[SimpleLine | SpannedText],
+        feed: list[str],
         sep: str = "",
     ) -> str:
         """Concatenate the buffer into a single string to send to the pager."""
-        output = []
-        yeet = output.append
-        if self.plain:
-            for segment in feed:
-                # if isinstance(segment, TextLine):
-                #     yeet(segment.line)
-                match segment:
-                    case TextLine():
-                        # add the colour here from its name `segment.__doc__`
-                        yeet(segment.line)
-                    case SpannedText():
-                        # add the colour here from its style attribute (Style enum)
-                        yeet(segment.line)
-                    case str():
-                        # presume we were sneakily passed a string? Allow it
-                        yeet(segment)
-                    case _:
-                        raise TypeError("Strictly only TextLine, SpannedText, or str")
-        else:
-            raise NotImplementedError("Not done styled segments yet")
-        return sep.join(output)
+        return sep.join(feed)
 
 
 """
