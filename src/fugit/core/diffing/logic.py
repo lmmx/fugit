@@ -26,7 +26,7 @@ DiffInfoGP = None  # Not migrated
 
 def diff(**config) -> list[str]:
     """Narrow the input type to DiffConfig type for `load_diff`."""
-    return load_diff(DiffConfig.model_validate(config))
+    return load_diff(msgspec.convert(config, type=DiffConfig))
 
 
 def load_diff(config: DiffConfig) -> list[str]:

@@ -19,6 +19,7 @@ classifiers = [
 ]
 dependencies = [
     "GitPython>=3.1.40",
+    "argh>=0.31.3",
     "defopt",
     "line-profiler>=4.1.2",
     "msgspec>=0.18.5",
@@ -26,6 +27,7 @@ dependencies = [
     "parse>=1.20.0",
     "pydantic>=2.4.2",
     "pygit2>=1.13.3",
+    "pysnooper>=1.2.1",
     "rich>=13.7.0",
 ]
 description = "Git diff handling in Python."
@@ -39,6 +41,12 @@ license = {text = "MIT"}
 name = "fugit"
 readme = "README.md"
 requires-python = ">=3.10,<3.12"
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit>=4.1.0",
+    "pytest>=8.3.4",
+]
 
 [project.scripts]
 fugit = "fugit.cli:run_cli"
