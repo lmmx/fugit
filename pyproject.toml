@@ -4,17 +4,17 @@ requires = ["pdm-backend"]
 
 [project]
 authors = [
-    {email = "louismmx@gmail.com", name = "Louis Maddox"},
+    { email = "louismmx@gmail.com", name = "Louis Maddox" },
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
-    "Framework :: Pydantic :: 2",
     "Framework :: Pydantic",
+    "Framework :: Pydantic :: 2",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python",
     "Topic :: Software Development :: Libraries",
 ]
 dependencies = [
@@ -37,7 +37,7 @@ keywords = [
     "pydantic",
     "pypi",
 ]
-license = {text = "MIT"}
+license = { text = "MIT" }
 name = "fugit"
 readme = "README.md"
 requires-python = ">=3.10,<3.12"
@@ -61,7 +61,7 @@ Repository = "https://github.com/lmmx/fugit.git"
 known_first_party = ["fugit"]
 
 [tool.pdm]
-version = {path = "src/fugit/__init__.py", source = "file"}
+version = { path = "src/fugit/__init__.py", source = "file" }
 
 [tool.pdm.dev-dependencies]
 develop = [
